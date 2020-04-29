@@ -5,6 +5,9 @@ import { Container } from 'typedi';
 import { ConfigHelperService } from './services/config-helper.service';
 import * as cors from '@koa/cors'
 import { Md5Helper } from './utils/md5.helper';
+import * as https from 'https';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const config = Container.get(ConfigHelperService).getConfig();
 useContainer(Container);
@@ -24,5 +27,14 @@ const app = createKoaServer({
     }
 });
 
-app.listen(config.port);
-console.log('Ыerver is running @ localhost: ' + config.port);
+if (config.ssl.enabled) {
+    const httpsConfig = {
+        key: fs.readFileSync(path.resolve(config.ssl.private_key_path), 'utf8').toString(),
+        cert: fs.readFileSync(path.resolve(config.ssl.cerificate_path), 'utf8').toString()
+    };
+    https.createServer(httpsConfig, app.callback()).listen(config.port, config.host);
+} else {
+    app.listen(config.port, config.host);
+}
+
+console.log(`Server is running @ ${config.ssl.enabled ? 'https' : 'http'}://${config.host}:${config.port}`);
