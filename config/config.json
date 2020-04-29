@@ -1,5 +1,10 @@
 {
     "host": "stellar.igne08.pp.ua",
+    "ssl": {
+        "enabled": true,
+        "cerificate_path": "/etc/ssl/certs.crt",
+        "private_key_path": "/etc/ssl/private.key"
+    },
     "port": 4443,
     "database_file": "database/accounts.json",
     "stellar_toml_file": "config/stellar.toml",

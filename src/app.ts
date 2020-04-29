@@ -27,12 +27,14 @@ const app = createKoaServer({
     }
 });
 
-const httpsConfig = {
-    key: fs.readFileSync(path.resolve('/etc/ssl/private.key'), 'utf8').toString(),
-    cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/ssl/certs.crt'), 'utf8').toString()
-};
+if (config.ssl.enabled) {
+    const httpsConfig = {
+        key: fs.readFileSync(path.resolve(config.ssl.private_key_path), 'utf8').toString(),
+        cert: fs.readFileSync(path.resolve(config.ssl.cerificate_path), 'utf8').toString()
+    };
+    https.createServer(httpsConfig, app.callback()).listen(config.port, config.host);
+} else {
+    app.listen(config.port, config.host);
+}
 
-https.createServer(httpsConfig, app.callback()).listen('4433');
-
-app.listen(config.port, config.host);
-console.log(`Server is running @ https://${config.host}:${config.port}`);
+console.log(`Server is running @ ${config.ssl.enabled ? 'https' : 'http'}://${config.host}:${config.port}`);
