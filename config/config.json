@@ -1,0 +1,10 @@
+{
+    "host": "stellar.igne08.pp.ua",
+    "port": 4443,
+    "database_file": "database/accounts.json",
+    "stellar_toml_file": "config/stellar.toml",
+    "users": [{
+        "username": "test",
+        "password": "gq9hh3ktJ5LJmTua"
+    }]
+}
