@@ -1,10 +1,10 @@
-import { Service } from 'typedi/decorators/Service';
 import { Post } from 'routing-controllers/decorator/Post';
-import { BodyParam } from 'routing-controllers';
+import { BodyParam, JsonController } from 'routing-controllers';
 import { ConfigHelperService } from '../services/config-helper.service';
 import { Md5Helper } from '../utils/md5.helper';
+import { WrongCredentialsError } from '../errors/wrong-credentials.error';
 
-@Service()
+@JsonController()
 export class AuthController {
     constructor(private configHelper: ConfigHelperService) {}
 
@@ -14,6 +14,12 @@ export class AuthController {
             return {
                 auth: Buffer.from(`${username}:${Md5Helper.getMd5Hash(password)}`).toString('base64')
             }
+        } else {
+            throw new WrongCredentialsError({
+                error: {
+                    type: 'WrongCredentialsError'
+                }
+            });
         }
     }
 
