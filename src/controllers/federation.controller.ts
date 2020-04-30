@@ -15,6 +15,7 @@ import { AccountNotFoundError } from '../errors/account-not-found.error';
 import { IAccount } from '../interfaces/account.interface';
 import * as fs from 'fs';
 import * as path from 'path';
+import { StellarChecksHelper } from '../utils/stellar-checks.helper';
 
 @JsonController()
 export class FederationController {
@@ -56,7 +57,7 @@ export class FederationController {
     @Put('/accounts/create')
     public createNewAccount(
         @BodyParam('federation') federation: string,
-        @BodyParam('address') address:string,
+        @BodyParam('address') address: string,
         @BodyParam('memo_type') memo_type: string = 'none',
         @BodyParam('memo') memo?: string
     ): any {
@@ -65,6 +66,8 @@ export class FederationController {
             address,
             memo_type
         };
+
+        StellarChecksHelper.checkAccount(newAccount);
 
         if (typeof memo !== 'undefined') {
             newAccount.memo = memo;
@@ -87,6 +90,8 @@ export class FederationController {
             address,
             memo_type
         };
+
+        StellarChecksHelper.checkAccount(newAccount);
 
         if (typeof memo !== 'undefined') {
             newAccount.memo = memo;
