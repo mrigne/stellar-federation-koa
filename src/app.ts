@@ -21,7 +21,7 @@ const app = createKoaServer({
     }),
     authorizationChecker: (action: Action) => {
         const token = action.request.headers["authorization"];
-        const [username, hash] = atob(token.replace('Bearer ', '')).split(':');
+        const [username, hash] = Buffer.from(token.replace('Bearer ', ''), 'base64').toString().split(':');
 
         return config.users.some(userEntry => userEntry.username === username && Md5Helper.getMd5Hash(userEntry.password) === hash);
     }

@@ -12,7 +12,7 @@ export class AuthController {
     public signIn(@BodyParam('username') username, @BodyParam('password') password): any {
         if (this.isUserCorrect(username, password)) {
             return {
-                auth: btoa(`${username}:${Md5Helper.getMd5Hash(password)}`)
+                auth: Buffer.from(`${username}:${Md5Helper.getMd5Hash(password)}`).toString('base64')
             }
         }
     }
