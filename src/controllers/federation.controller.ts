@@ -96,7 +96,7 @@ export class FederationController {
     }
 
     @Authorized()
-    @Delete('/accounts/delete')
+    @Post('/accounts/delete')
     public deleteAccount(@BodyParam('federation') federation: string): any {
         this.dbHelper.deleteAccount(federation);
         return '';
