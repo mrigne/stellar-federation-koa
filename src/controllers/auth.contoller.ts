@@ -9,7 +9,7 @@ export class AuthController {
     constructor(private configHelper: ConfigHelperService) {}
 
     @Post('/signin')
-    public signIn(@BodyParam('username') username, @BodyParam('password') password): any {
+    public signIn(@BodyParam('username') username: string, @BodyParam('password') password: string): any {
         if (this.isUserCorrect(username, password)) {
             return {
                 auth: Buffer.from(`${username}:${Md5Helper.getMd5Hash(password)}`).toString('base64')
