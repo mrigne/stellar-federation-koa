@@ -57,7 +57,7 @@ export class FederationController {
     public createNewAccount(
         @BodyParam('federation') federation: string,
         @BodyParam('address') address:string,
-        @BodyParam('memo_type') memo_type = 'none',
+        @BodyParam('memo_type') memo_type: string = 'none',
         @BodyParam('memo') memo?: string | number
     ): any {
         const newAccount: IAccount = {
