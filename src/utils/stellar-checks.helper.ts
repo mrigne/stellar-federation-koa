@@ -8,7 +8,7 @@ export class StellarChecksHelper {
     }
 
     public static checkFederationAddress(federation: string): boolean {
-        const regex = /[a-zA-Z0-9_\-\.~@#$%^&=\+]+/;
+        const regex = /^[a-zA-Z0-9_\-\.~@#$%^&=\+]+$/;
         return regex.test(federation);
     }
 
