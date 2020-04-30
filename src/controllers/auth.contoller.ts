@@ -1,5 +1,5 @@
 import { Post } from 'routing-controllers/decorator/Post';
-import { BodyParam, JsonController } from 'routing-controllers';
+import { Authorized, BodyParam, CurrentUser, Get, JsonController } from 'routing-controllers';
 import { ConfigHelperService } from '../services/config-helper.service';
 import { Md5Helper } from '../utils/md5.helper';
 import { WrongCredentialsError } from '../errors/wrong-credentials.error';
@@ -21,6 +21,14 @@ export class AuthController {
                 }
             });
         }
+    }
+
+    @Authorized()
+    @Get('/whoami')
+    public getUserName(@CurrentUser() username?: string): any {
+        return {
+            username
+        };
     }
 
     private isUserCorrect(username: string, password: string): any {

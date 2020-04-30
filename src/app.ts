@@ -31,6 +31,13 @@ const app = createKoaServer({
         const [username, hash] = Buffer.from(token.replace('Bearer ', ''), 'base64').toString().split(':');
 
         return config.users.some(userEntry => userEntry.username === username && Md5Helper.getMd5Hash(userEntry.password) === hash);
+    },
+    currentUserChecker: (action) => {
+        const token = action.request.headers["authorization"];
+        if (!token) {
+            return null;
+        }
+        return Buffer.from(token.replace('Bearer ', ''), 'base64').toString().split(':')[0];
     }
 });
 
