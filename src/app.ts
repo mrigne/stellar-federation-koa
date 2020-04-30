@@ -8,12 +8,16 @@ import { Md5Helper } from './utils/md5.helper';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+import { AuthController } from './controllers/auth.contoller';
 
 const config = Container.get(ConfigHelperService).getConfig();
 useContainer(Container);
 
 const app = createKoaServer({
-    controllers: [FederationController],
+    controllers: [
+        FederationController,
+        AuthController
+    ],
     cors: cors({
         allowMethods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS', 'PATCH'],
         allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'User-Key'],
