@@ -25,7 +25,7 @@ export class FederationController {
     @Get('/accounts/list')
     public getAllAccounts() {
         return this.dbHelper.getAllAccounts().map(accountEntry => {
-            accountEntry.federation += `*${this.configHelper.getConfig().host}`;
+            accountEntry.federation;
             return accountEntry;
         });
     }
