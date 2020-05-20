@@ -16,6 +16,7 @@ import { IAccount } from '../interfaces/account.interface';
 import * as fs from 'fs';
 import * as path from 'path';
 import { StellarChecksHelper } from '../utils/stellar-checks.helper';
+import { IFederationResponse } from '../interfaces/federation-response.interface';
 
 @JsonController()
 export class FederationController {
@@ -47,9 +48,7 @@ export class FederationController {
         if (foundAccounts.length === 0) {
             throw new AccountNotFoundError();
         } else {
-            const foundAccount = foundAccounts[0];
-            foundAccount.federation += `*${this.configHelper.getConfig().host}`;
-            return foundAccounts[0];
+            return this.formFederationAccountResponse(foundAccounts[0]);
         }
     }
 
@@ -105,5 +104,17 @@ export class FederationController {
     public deleteAccount(@BodyParam('federation') federation: string): any {
         this.dbHelper.deleteAccount(federation);
         return '';
+    }
+
+    private formFederationAccountResponse(dbAccount: IAccount): IFederationResponse {
+        const federationResponse: IFederationResponse = {
+            stellar_address: `${dbAccount.federation}*${this.configHelper.getConfig().host}`,
+            account_id: dbAccount.address,
+            memo_type: dbAccount.memo_type || 'none'
+        };
+        if (dbAccount.hasOwnProperty('memo')) {
+            federationResponse.memo = dbAccount.memo
+        }
+        return federationResponse;
     }
 }
