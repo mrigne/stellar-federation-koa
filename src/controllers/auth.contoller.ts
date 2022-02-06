@@ -9,10 +9,11 @@ export class AuthController {
     constructor(private configHelper: ConfigHelperService) {}
 
     @Post('/signin')
-    public signIn(@BodyParam('username') username: string, @BodyParam('password') password: string): any {
-        if (this.isUserCorrect(username, password)) {
+    public signIn(@BodyParam('login') login: string, @BodyParam('password') password: string): any {
+        if (this.isUserCorrect(login, password)) {
             return {
-                auth: Buffer.from(`${username}:${Md5Helper.getMd5Hash(password)}`).toString('base64')
+                tokenType: 'Basic',
+                token: Buffer.from(`${login}:${Md5Helper.getMd5Hash(password)}`).toString('base64')
             }
         } else {
             throw new WrongCredentialsError({

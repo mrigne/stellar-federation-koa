@@ -1,6 +1,8 @@
+import {MemoType} from "../enums/memo-type.enum";
+
 export interface IAccount {
     federation: string;
     address: string;
-    memo_type?: string;
-    memo?: string | number;
+    memoType?: MemoType;
+    memo?: string;
 }

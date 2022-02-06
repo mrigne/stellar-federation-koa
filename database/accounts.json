@@ -2,18 +2,18 @@
     {
         "federation": "id_memo",
         "address": "GA2W7Z7ZY4Z3BR7KDX7WQ6ECFPKXYQXPTESLCS6BJRQWBAWODV64HZWO",
-        "memo_type": "id",
+        "memoType": "Id",
         "memo": "9379992"
     },
     {
         "federation": "text_memo",
         "address": "GA2W7Z7ZY4Z3BR7KDX7WQ6ECFPKXYQXPTESLCS6BJRQWBAWODV64HZWO",
-        "memo_type": "text",
+        "memoType": "Text",
         "memo": "My super text for address"
     },
     {
         "federation": "nomemo",
         "address": "GA2W7Z7ZY4Z3BR7KDX7WQ6ECFPKXYQXPTESLCS6BJRQWBAWODV64HZWO",
-        "memo_type": "none"
+        "memoType": "None"
     }
 ]

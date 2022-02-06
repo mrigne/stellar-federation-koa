@@ -1,22 +1,14 @@
-import {
-    Get,
-    Post,
-    Put,
-    Delete,
-    JsonController,
-    QueryParam,
-    Authorized,
-    BodyParam
-} from 'routing-controllers';
-import { DatabaseHelperService } from '../services/database-helper.service';
-import { IColumnsSearchParam } from '../interfaces/columns-search-param';
-import { ConfigHelperService } from '../services/config-helper.service';
-import { AccountNotFoundError } from '../errors/account-not-found.error';
-import { IAccount } from '../interfaces/account.interface';
+import {Authorized, BodyParam, Delete, Get, JsonController, Post, Put, QueryParam} from 'routing-controllers';
+import {DatabaseHelperService} from '../services/database-helper.service';
+import {IColumnsSearchParam} from '../interfaces/columns-search-param';
+import {ConfigHelperService} from '../services/config-helper.service';
+import {AccountNotFoundError} from '../errors/account-not-found.error';
+import {IAccount} from '../interfaces/account.interface';
 import * as fs from 'fs';
 import * as path from 'path';
-import { StellarChecksHelper } from '../utils/stellar-checks.helper';
-import { IFederationResponse } from '../interfaces/federation-response.interface';
+import {StellarChecksHelper} from '../utils/stellar-checks.helper';
+import {IFederationResponse} from '../interfaces/federation-response.interface';
+import {MemoType} from '../enums/memo-type.enum';
 
 @JsonController()
 export class FederationController {
@@ -24,7 +16,7 @@ export class FederationController {
     constructor(private dbHelper: DatabaseHelperService,
                 private configHelper: ConfigHelperService) {}
 
-    @Get('/accounts/list')
+    @Get('/accounts')
     public getAllAccounts() {
         return this.dbHelper.getAllAccounts().map(accountEntry => {
             accountEntry.federation;
@@ -53,17 +45,17 @@ export class FederationController {
     }
 
     @Authorized()
-    @Put('/accounts/create')
+    @Post('/accounts')
     public createNewAccount(
         @BodyParam('federation') federation: string,
         @BodyParam('address') address: string,
-        @BodyParam('memo_type') memo_type: string = 'none',
+        @BodyParam('memoType') memoType: string = MemoType.None,
         @BodyParam('memo') memo?: string
     ): any {
         const newAccount: IAccount = {
             federation,
             address,
-            memo_type
+            memoType: memoType as MemoType
         };
 
         StellarChecksHelper.checkAccount(newAccount);
@@ -77,17 +69,17 @@ export class FederationController {
     }
 
     @Authorized()
-    @Post('/accounts/update')
+    @Put('/accounts')
     public  updateAccount(
         @BodyParam('federation') federation: string,
         @BodyParam('address') address:string,
-        @BodyParam('memo_type') memo_type: string = 'none',
+        @BodyParam('memoType') memoType: string = MemoType.None,
         @BodyParam('memo') memo?: string
     ): any {
         const newAccount: IAccount = {
             federation,
             address,
-            memo_type
+            memoType: memoType as MemoType
         };
 
         StellarChecksHelper.checkAccount(newAccount);
@@ -100,7 +92,7 @@ export class FederationController {
     }
 
     @Authorized()
-    @Post('/accounts/delete')
+    @Delete('/accounts')
     public deleteAccount(@BodyParam('federation') federation: string): any {
         this.dbHelper.deleteAccount(federation);
         return '';
@@ -110,7 +102,7 @@ export class FederationController {
         const federationResponse: IFederationResponse = {
             stellar_address: `${dbAccount.federation}*${this.configHelper.getConfig().host}`,
             account_id: dbAccount.address,
-            memo_type: dbAccount.memo_type || 'none'
+            memo_type: dbAccount.memoType || MemoType.None
         };
         if (dbAccount.hasOwnProperty('memo')) {
             federationResponse.memo = dbAccount.memo

@@ -6,7 +6,7 @@ import { IConfig } from '../interfaces/config.interface';
 @Service()
 export class ConfigHelperService {
     private static readonly CONFIG_FILE_PATH = path.resolve('config/config.json');
-    private config;
+    private readonly config;
 
     constructor() {
         this.config = JSON.parse(fs.readFileSync(ConfigHelperService.CONFIG_FILE_PATH).toString());
